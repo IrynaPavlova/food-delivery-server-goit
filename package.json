@@ -19,6 +19,9 @@
   "homepage": "https://github.com/IrynaPavlova/food-delivery-server-goit#readme",
   "devDependencies": {
     "morgan": "^1.9.1",
-    "nodemon": "^2.0.2"
+    "nodemon": "^1.18.4"
+  },
+  "dependencies": {
+    "shortid": "^2.2.15"
   }
 }

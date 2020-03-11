@@ -12,7 +12,10 @@ const startServer = port => {
 
     logger(request, response, () => func(request, response));
   });
-  server.listen(port, () => {
+  server.listen(port, err => {
+    if (err) {
+      return console.log("Somthing bad happened", err);
+    }
     console.log("Server listening on port", port);
   });
 };

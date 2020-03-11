@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const productRouter = (request, response) => {
+const productRoute = (request, response) => {
   if (request.method === "GET") {
     const filePath = path.join(
       __dirname,
@@ -23,4 +23,4 @@ const productRouter = (request, response) => {
   }
 };
 
-module.exports = productRouter;
+module.exports = productRoute;
