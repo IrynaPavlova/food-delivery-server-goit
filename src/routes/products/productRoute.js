@@ -1,25 +1,22 @@
-const fs = require("fs");
-const path = require("path");
+const url = require("url");
+
+const getAllProducts = require("./getAllProducts");
+const getProductById = require("./getProductById");
+const getProducByCategory = require("./getProductByCategory");
 
 const productRoute = (request, response) => {
   if (request.method === "GET") {
-    const filePath = path.join(
-      __dirname,
-      "../../",
-      "db",
-      "products",
-      "all-products.json"
-    );
+    const parsedUrl = url.parse(request.url);
+    const path = parsedUrl.path;
 
-    response.writeHead(200, {
-      "Content-Type": "aplication/json"
-    });
+    const pathId = /products\/\d/;
+    const pathCategory = /products\/\?category=[\d\D]/;
 
-    const readStream = fs.createReadStream(filePath, { encoding: "utf8" });
-    readStream.pipe(response);
-  } else {
-    response.writeHead(401, { "Content-Type": "text/plain" });
-    response.end("Forbidden");
+    path === "/products" && getAllProducts(request, response);
+    path.match(pathId) && getProductById(request, response);
+    path.match(pathCategory) && getProducByCategory(request, response);
+
+    return;
   }
 };
 

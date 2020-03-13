@@ -1,8 +1,9 @@
 const fs = require("fs");
 const path = require("path");
+const id = require("shortid");
 
 const saveUser = (user, response) => {
-  const file = `${user.username}.json`;
+  const file = `${user.username.toLowerCase()}${user.userid}.json`;
 
   const userPath = path.resolve(__dirname, "../../", "db", "users", file);
   fs.writeFile(userPath, JSON.stringify(user), err => {
@@ -25,7 +26,9 @@ const userRoute = (request, response) => {
     });
 
     request.on("end", function() {
-      const user = JSON.parse(body);
+      let user = JSON.parse(body);
+      const userId = id.generate();
+      user = { userid: userId, ...user };
       saveUser(user, response);
     });
   } else {
