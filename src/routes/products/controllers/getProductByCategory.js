@@ -1,18 +1,13 @@
 const fs = require("fs");
 const path = require("path");
-const url = require("url");
-const qs = require("querystring");
 
-const getProductById = (request, response) => {
-  const parsedUrl = url.parse(request.url);
-  const pathIds = parsedUrl.path;
-  const objectIds = qs.parse(pathIds);
-  const stringIds = Object.values(objectIds)[0];
-  const ids = stringIds.slice(1, stringIds.length - 1).split(",");
+const getProductByCategory = (request, response) => {
+  const stringCategory = Object.values(request.query)[0];
+  const category = stringCategory.slice(1, stringCategory.length - 1);
 
   const filePath = path.join(
     __dirname,
-    "../../",
+    "../../../",
     "db",
     "products",
     "all-products.json"
@@ -27,7 +22,7 @@ const getProductById = (request, response) => {
   );
 
   const products = allProducts.filter(elem => {
-    return ids.find(item => elem.id == item);
+    return elem.categories == category;
   });
 
   if (products.length > 0) {
@@ -45,4 +40,4 @@ const getProductById = (request, response) => {
   }
 };
 
-module.exports = getProductById;
+module.exports = getProductByCategory;

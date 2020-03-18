@@ -1,26 +1,19 @@
-const url = require("url");
+const { Router } = require("express");
+const getAllProducts = require("./controllers/getAllProducts");
+const getProductById = require("./controllers/getProductById");
+const getProductByCategory = require("./controllers/getProductByCategory");
+const getProductByIds = require("./controllers/getProductsByIds");
 
-const getAllProducts = require("./getAllProducts");
-const getProductById = require("./getProductById");
-const getProductByCategory = require("./getProductByCategory");
-const getProductByIds = require("./getProductsByIds");
+const productRoute = Router();
 
-const productRoute = (request, response) => {
-  if (request.method === "GET") {
-    const parsedUrl = url.parse(request.url);
-    const path = parsedUrl.path;
+productRoute.get("/", (request, response) => {
+  const requestQuery = Object.keys(request.query)[0];
 
-    const pathId = /products\/\d/;
-    const pathIds = /products\/\?ids=[\d\D]/;
-    const pathCategory = /products\/\?category=[\d\D]/;
+  request.url === "/" && getAllProducts(request, response);
+  requestQuery === "ids" && getProductByIds(request, response);
+  requestQuery === "category" && getProductByCategory(request, response);
+});
 
-    path === "/products" && getAllProducts(request, response);
-    path.match(pathId) && getProductById(request, response);
-    path.match(pathIds) && getProductByIds(request, response);
-    path.match(pathCategory) && getProductByCategory(request, response);
-
-    return;
-  }
-};
+productRoute.get("/:id", getProductById);
 
 module.exports = productRoute;
