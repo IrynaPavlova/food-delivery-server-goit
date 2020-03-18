@@ -40,7 +40,7 @@ const getProductById = (req, res) => {
     return;
   }
 
-  res.writeHead(200, { "Content-Type": "application/json" });
+  res.writeHead(404, { "Content-Type": "application/json" });
   res.write(JSON.stringify({ status: "no products", products }));
   res.end();
 };

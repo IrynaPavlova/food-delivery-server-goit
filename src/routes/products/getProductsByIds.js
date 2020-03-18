@@ -38,7 +38,7 @@ const getProductById = (request, response) => {
     response.end();
     return;
   } else {
-    response.writeHead(200, { "Content-Type": "application/json" });
+    response.writeHead(404, { "Content-Type": "application/json" });
     response.write(JSON.stringify({ status: "no products", products }));
     response.end();
     return;
