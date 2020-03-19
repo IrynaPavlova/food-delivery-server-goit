@@ -81,5 +81,29 @@
         "created": "21-08-2018",
         "modified": "21-08-2018",
         "categories": ["pizza"]
+    },
+    {
+        "id": 19112838,
+        "sku": 1120008,
+        "name": "Пиво",
+        "description": "Крафтовое светлое нефильтрованное с ярко выраженными цитрусовыми нотками",
+        "price": "50",
+        "currency": "UAN",
+        "creatorId": 1,
+        "created": "21-08-2018",
+        "modified": "21-08-2018",
+        "categories": ["drinks"]
+    },
+    {
+        "id": 19112839,
+        "sku": 1120009,
+        "name": "Сок апельсиновый",
+        "description": "Натуральный свежевыжатый с насыщенным вкусом",
+        "price": "30",
+        "currency": "UAN",
+        "creatorId": 1,
+        "created": "21-08-2018",
+        "modified": "21-08-2018",
+        "categories": ["drinks"]
     }
 ]
