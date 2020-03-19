@@ -26,16 +26,16 @@ const getProductById = (request, response) => {
   });
 
   if (products.length > 0) {
-    response.writeHead(200, {
-      "Content-Type": "aplication/json"
-    });
-    response.write(JSON.stringify({ status: "success", products }));
-    response.end();
+    response
+      .set("Content-Type", "aplication/json")
+      .status(200)
+      .json({ status: "success", products });
     return;
   } else {
-    response.writeHead(200, { "Content-Type": "application/json" });
-    response.write(JSON.stringify({ status: "no products", products }));
-    response.end();
+    response
+      .set("Content-Type", "aplication/json")
+      .status(404)
+      .json({ status: "no products", products });
     return;
   }
 };

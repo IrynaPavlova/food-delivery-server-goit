@@ -6,14 +6,14 @@ const userRoute = require("./routes/users/userRoute");
 const app = express();
 
 const errorHandler = (error, request, response, next) => {
-  response.status(500).send("Error found: " + error.stack);
+  response.status(500).send("Error:" + error.stack);
 };
 
 const startServer = port => {
   app
     .use(express.json())
     .use(corsMiddleware())
-    .use(morgan("dev"))
+    .use(morgan("combined"))
     .use("/products", productRoute)
     .use("/users", userRoute)
     .use(errorHandler);

@@ -13,16 +13,10 @@ const getAllProducts = (request, response) => {
 
     response.set("Content-Type", "aplication/json").status(200);
 
-    // response.writeHead(200, {
-    //   "Content-Type": "aplication/json"
-    // });
-
     const readStream = fs.createReadStream(filePath, { encoding: "utf8" });
     readStream.pipe(response);
   } else {
     response.set("Content-Type", "text/plain").status(401);
-    // response.writeHead(401, { "Content-Type": "text/plain" });
-    // response.end("Forbidden");
   }
 };
 

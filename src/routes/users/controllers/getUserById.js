@@ -1,17 +1,17 @@
 const fs = require("fs");
 const path = require("path");
 
-const getProductById = (request, response) => {
+const getUserById = (request, response) => {
   const id = request.params.id;
 
   const filePath = path.join(
     __dirname,
     "../../../",
-    "db/products",
-    "all-products.json"
+    "db/users",
+    "all-users.json"
   );
 
-  const allProducts = JSON.parse(
+  const allUsers = JSON.parse(
     fs.readFileSync(filePath, (err, data) => {
       if (err) {
         console.log(err);
@@ -19,22 +19,22 @@ const getProductById = (request, response) => {
     })
   );
 
-  const product = allProducts.filter(elem => {
-    return elem.id == id;
+  const user = allUsers.filter(elem => {
+    return elem.userid == id;
   });
 
-  if (product.length > 0) {
+  if (user.length > 0) {
     response
       .set("Content-Type", "aplication/json")
       .status(200)
-      .json({ status: "success", product });
+      .json({ status: "success", user });
     return;
   }
   response
     .set("Content-Type", "aplication/json")
     .status(404)
-    .json({ status: "no products", product });
+    .json({ status: "not found" });
   return;
 };
 
-module.exports = getProductById;
+module.exports = getUserById;
