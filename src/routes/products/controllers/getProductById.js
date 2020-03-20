@@ -29,12 +29,13 @@ const getProductById = (request, response) => {
       .status(200)
       .json({ status: "success", product });
     return;
+  } else {
+    response
+      .set("Content-Type", "aplication/json")
+      .status(404)
+      .json({ status: "no products", product });
+    return;
   }
-  response
-    .set("Content-Type", "aplication/json")
-    .status(404)
-    .json({ status: "no products", product });
-  return;
 };
 
 module.exports = getProductById;
