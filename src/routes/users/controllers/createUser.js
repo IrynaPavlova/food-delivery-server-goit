@@ -25,7 +25,7 @@ const createUser = (request, response) => {
     }
 
     const userId = Date.now();
-    const userWithId = { userid: userId, ...user.value };
+    const userWithId = { userid: userId, ...user.value, images: [] };
     filePath = path.join(
       __dirname,
       "../../../",
@@ -43,7 +43,9 @@ const createUser = (request, response) => {
       allUsers.push(userWithId);
 
       fs.writeFile(filePath, JSON.stringify(allUsers), err => {
-        if (err) throw err;
+        if (err) {
+          return console.log(err);
+        }
       });
     });
 
@@ -51,6 +53,7 @@ const createUser = (request, response) => {
       .set("Content-Type", "aplication/json")
       .status(201)
       .json({ status: "success", user: userWithId });
+    return;
   } else {
     response
       .set("Content-Type", "aplication/json")

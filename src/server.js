@@ -4,6 +4,7 @@ const corsMiddleware = require("cors");
 const productRoute = require("./routes/products/productRoute");
 const userRoute = require("./routes/users/userRoute");
 const orderRoute = require("./routes/orders/orderRoute");
+const imageRoute = require("./routes/images/imageRoute");
 const app = express();
 
 const errorHandler = (error, request, response, next) => {
@@ -18,6 +19,7 @@ const startServer = port => {
     .use("/products", productRoute)
     .use("/users", userRoute)
     .use("/orders", orderRoute)
+    .use("/images", imageRoute)
     .use(errorHandler);
 
   app.listen(port, error => {

@@ -62,11 +62,13 @@ const createOrder = (request, response) => {
       allOrders.push(orderToSave);
 
       fs.writeFile(filePathToOrders, JSON.stringify(allOrders), err => {
-        if (err) throw err;
+        if (err) {
+          return console.log(err);
+        }
       });
     });
 
-    if (Object.keys(orderToSave).length > 0) {
+    if (products.length > 0) {
       response
         .set("Content-Type", "aplication/json")
         .status(200)
