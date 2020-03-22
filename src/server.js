@@ -14,6 +14,7 @@ const errorHandler = (error, request, response, next) => {
 const startServer = port => {
   app
     .use(express.json())
+    .use(express.static("static"))
     .use(corsMiddleware())
     .use(morgan("combined"))
     .use("/products", productRoute)
