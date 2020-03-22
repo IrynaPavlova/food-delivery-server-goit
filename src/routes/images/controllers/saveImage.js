@@ -1,12 +1,23 @@
 const fs = require("fs");
 const path = require("path");
+const Joi = require("joi");
 const { port } = require("../../../../config");
+
+const validation = Joi.object().keys({
+  userId: Joi.string().required(),
+  file: Joi.object().required()
+});
 
 const saveImage = (request, response) => {
   if (request.method === "POST") {
     const body = request.body;
-    const userId = body.userId;
-    const imagePath = body.file.path;
+    const validateBody = Joi.validate(body, validation);
+    if (validateBody.error) {
+      return response.status(400).json(validateBody.error.details[0].message);
+    }
+
+    const userId = validateBody.value.userId;
+    const imagePath = validateBody.value.file.path;
     const imageStats = path.parse(imagePath);
     const imageUrl = `http://localhost:${port}/` + imageStats.base;
 
