@@ -1,22 +1,18 @@
-const fs = require("fs");
-const path = require("path");
+const Product = require("../productSchema");
 
-const getAllProducts = (request, response) => {
-  if (request.method === "GET") {
-    const filePath = path.join(
-      __dirname,
-      "../../../",
-      "db",
-      "products",
-      "all-products.json"
-    );
-
-    response.set("Content-Type", "aplication/json").status(200);
-
-    const readStream = fs.createReadStream(filePath, { encoding: "utf8" });
-    readStream.pipe(response);
-  } else {
-    response.set("Content-Type", "text/plain").status(401);
+const getAllProducts = async (request, response) => {
+  try {
+    const allProducts = await Product.find();
+    response.status(200).json({
+      status: "success",
+      products: allProducts
+    });
+  } catch (error) {
+    response.status(404).json({
+      status: "error",
+      message: error.message,
+      text: " no products"
+    });
   }
 };
 
