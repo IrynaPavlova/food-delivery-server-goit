@@ -1,43 +1,24 @@
 const Order = require("../orderSchema");
 const User = require("../../users/userSchema");
+const createOrder = async (request, response) => {
+  try {
+    const newOrder = new Order(request.body);
+    const order = await newOrder.save();
 
-const createOrder = (request, response) => {
-  const order = request.body;
+    const user = await User.findById(order.creator);
+    const userOrders = user.orders;
+    userOrders.push(order._id);
 
-  const newOrder = new Order(order);
-  //console.log("neworder", newOrder);
-  const savedOrder = newOrder.save();
+    await User.findOneAndUpdate(
+      { _id: order.creator },
+      { orders: userOrders },
+      { new: true }
+    );
 
-  const user = User.findById(savedOrder.creator);
-  console.log("user", user);
-  const userOrders = user.orders;
-  //console.log("userOrders", userOrders);
-  userOrders.push(order._id);
-
-  const sendError = () => {
-    response.status(400).json({
-      status: "error",
-      text: "order was not created"
-    });
-  };
-
-  const sendResponse = newUser => {
-    if (!newUser) {
-      return sendError();
-    }
-
-    response.status(201).json({
-      status: "success",
-      oder: savedOrder
-    });
-  };
-
-  User.findOneAndUpdate(
-    { _id: savedOrder.creator, orders: userOrders },
-    { new: true }
-  )
-    .then(sendResponse)
-    .catch(sendError);
+    response.status(201).json({ status: "success", order });
+  } catch (err) {
+    response.status(404).json({ status: "error", message: err.message });
+  }
 };
 
 module.exports = createOrder;

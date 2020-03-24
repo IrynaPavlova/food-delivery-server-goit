@@ -1,19 +1,19 @@
 const Order = require("../orderSchema");
 
-const getOrderById = async (request, response) => {
+const getAllOrders = async (request, response) => {
   try {
-    const id = request.params.id;
-    const findOrder = await Order.findById(id);
+    const allOrders = await Order.find();
     response.status(200).json({
       status: "success",
-      order: findOrder
+      orders: allOrders
     });
   } catch (error) {
     response.status(400).json({
       status: "error",
       message: error.message,
-      text: "order was not found"
+      text: " no orders"
     });
   }
 };
-module.exports = getOrderById;
+
+module.exports = getAllOrders;

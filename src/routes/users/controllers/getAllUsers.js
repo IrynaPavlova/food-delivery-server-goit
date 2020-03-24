@@ -1,20 +1,19 @@
 const User = require("../userSchema");
 
-const getUserById = async (request, response) => {
+const getAllUsers = async (request, response) => {
   try {
-    const id = request.params.id;
-    const findUser = await User.findById(id);
+    const allUsers = await User.find();
     response.status(200).json({
       status: "success",
-      user: findUser
+      users: allUsers
     });
   } catch (error) {
     response.status(400).json({
       status: "error",
       message: error.message,
-      text: "user was not found"
+      text: " no users"
     });
   }
 };
 
-module.exports = getUserById;
+module.exports = getAllUsers;

@@ -1,35 +1,29 @@
 const User = require("../userSchema");
 const bcrypt = require("bcrypt");
 
-const updateUser = (request, response) => {
-  const user = request.body;
-  const id = request.params.id;
+const updateUser = async (request, response) => {
+  try {
+    const user = request.body;
+    const id = request.params.id;
 
-  if (user.password) {
-    user.password = bcrypt.hashSync(user.password, 10);
-  }
-
-  const sendError = () => {
-    response.status(400).json({
-      status: "error",
-      text: "there is no such user"
-    });
-  };
-
-  const sendResponse = newUser => {
-    if (!newUser) {
-      return sendError();
+    if (user.password) {
+      user.password = bcrypt.hashSync(user.password, 10);
     }
 
+    const updatedUser = await User.findOneAndUpdate({ _id: id }, user, {
+      new: true
+    });
     response.status(201).json({
       status: "success",
-      user: newUser
+      user: updatedUser
     });
-  };
-
-  User.findOneAndUpdate({ _id: id }, user, { new: true })
-    .then(sendResponse)
-    .catch(sendError);
+  } catch (error) {
+    response.status(400).json({
+      status: "error",
+      message: error.message,
+      text: "there is no such user"
+    });
+  }
 };
 
 module.exports = updateUser;
