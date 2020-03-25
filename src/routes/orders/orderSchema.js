@@ -16,7 +16,8 @@ const orderSchema = new Schema({
         },
         type: {
           type: String,
-          required: true
+          required: true,
+          enum: ["M", "XL", "XXL"]
         },
         itemsCount: {
           type: Number,
@@ -28,7 +29,8 @@ const orderSchema = new Schema({
   },
   deliveryType: {
     type: String,
-    required: true
+    required: true,
+    enum: ["delivery", "office"]
   },
   deliveryAddress: {
     type: String,
@@ -40,7 +42,8 @@ const orderSchema = new Schema({
   },
   status: {
     type: String,
-    required: true
+    required: true,
+    enum: ["inProgress", "declined", "finished", "failed"]
   }
 });
 

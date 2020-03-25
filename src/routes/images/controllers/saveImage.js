@@ -1,63 +1,44 @@
-const fs = require("fs");
+const Image = require("../imageSchema");
+const User = require("../../users/userSchema");
 const path = require("path");
-const Joi = require("joi");
 const { port } = require("../../../../config");
 
-const validation = Joi.object().keys({
-  userId: Joi.string().required(),
-  file: Joi.object().required()
-});
-
-const saveImage = (request, response) => {
-  if (request.method === "POST") {
+const saveImage = async (request, response) => {
+  try {
     const body = request.body;
-    const validateBody = Joi.validate(body, validation);
-    if (validateBody.error) {
-      return response.status(400).json(validateBody.error.details[0].message);
-    }
 
-    const userId = validateBody.value.userId;
-    const imagePath = validateBody.value.file.path;
+    const userId = body.userId;
+    const imagePath = body.file.path;
     const imageStats = path.parse(imagePath);
     const imageUrl = `http://localhost:${port}/` + imageStats.base;
+    imageData = {
+      userId: userId,
+      file: imageUrl
+    };
 
-    usersfilePath = path.join(
-      __dirname,
-      "../../../",
-      "db",
-      "users",
-      "all-users.json"
+    const newImage = new Image(imageData);
+    const ImageToSave = await newImage.save();
+
+    const user = await User.findById(userId);
+    const userImages = user.images;
+    userImages.push(imageUrl);
+
+    await User.findOneAndUpdate(
+      { _id: ImageToSave.userId },
+      { images: userImages },
+      { new: true }
     );
 
-    fs.readFile(usersfilePath, (err, data) => {
-      if (err) {
-        return console.log(err);
-      }
-      const parsedData = JSON.parse(data);
-      const allUsers = parsedData;
-
-      const users = allUsers.filter(elem => {
-        return elem.userid == userId ? elem.images.push(imageUrl) : elem;
-      });
-
-      fs.writeFile(usersfilePath, JSON.stringify(users), err => {
-        if (err) {
-          return console.log(err);
-        }
-      });
+    response.status(201).json({
+      status: "success",
+      image: ImageToSave
     });
-
-    response
-      .set()
-      .status(201)
-      .json({ status: `was saved in:user-${userId}` });
-    return;
-  } else {
-    response
-      .set()
-      .status(400)
-      .json({ error: "error" });
-    return;
+  } catch (error) {
+    response.status(400).json({
+      status: "error",
+      message: error.message,
+      text: "image was not saved"
+    });
   }
 };
 
