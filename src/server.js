@@ -1,21 +1,31 @@
-const http = require("http");
-const url = require("url");
 const morgan = require("morgan");
-const router = require("./routes/router");
-const logger = morgan("combined");
-const getRoute = require("./helpers/getRoute");
+const express = require("express");
+const corsMiddleware = require("cors");
+const productRoute = require("./routes/products/productRoute");
+const userRoute = require("./routes/users/userRoute");
+const orderRoute = require("./routes/orders/orderRoute");
+const imageRoute = require("./routes/images/imageRoute");
+const app = express();
+
+const errorHandler = (error, request, response, next) => {
+  response.status(500).send("Error:" + error.stack);
+};
 
 const startServer = port => {
-  const server = http.createServer((request, response) => {
-    const parsedUrl = url.parse(request.url);
+  app
+    .use(express.json())
+    .use(express.static("static"))
+    .use(corsMiddleware())
+    .use(morgan("combined"))
+    .use("/products", productRoute)
+    .use("/users", userRoute)
+    .use("/orders", orderRoute)
+    .use("/images", imageRoute)
+    .use(errorHandler);
 
-    const func = getRoute(router, parsedUrl.pathname) || router.default;
-
-    logger(request, response, () => func(request, response));
-  });
-  server.listen(port, err => {
-    if (err) {
-      return console.log("Somthing bad happened", err);
+  app.listen(port, error => {
+    if (error) {
+      return console.log("Somthing bad happened", error);
     }
     console.log("Server listening on port", port);
   });

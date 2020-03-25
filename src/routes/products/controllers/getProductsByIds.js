@@ -1,18 +1,13 @@
 const fs = require("fs");
 const path = require("path");
-const url = require("url");
-const qs = require("querystring");
 
 const getProductById = (request, response) => {
-  const parsedUrl = url.parse(request.url);
-  const pathIds = parsedUrl.path;
-  const objectIds = qs.parse(pathIds);
-  const stringIds = Object.values(objectIds)[0];
+  const stringIds = Object.values(request.query)[0];
   const ids = stringIds.slice(1, stringIds.length - 1).split(",");
 
   const filePath = path.join(
     __dirname,
-    "../../",
+    "../../../",
     "db",
     "products",
     "all-products.json"
@@ -31,16 +26,16 @@ const getProductById = (request, response) => {
   });
 
   if (products.length > 0) {
-    response.writeHead(200, {
-      "Content-Type": "aplication/json"
-    });
-    response.write(JSON.stringify({ status: "success", products }));
-    response.end();
+    response
+      .set("Content-Type", "aplication/json")
+      .status(200)
+      .json({ status: "success", products });
     return;
   } else {
-    response.writeHead(404, { "Content-Type": "application/json" });
-    response.write(JSON.stringify({ status: "no products", products }));
-    response.end();
+    response
+      .set("Content-Type", "aplication/json")
+      .status(404)
+      .json({ status: "no products", products });
     return;
   }
 };
