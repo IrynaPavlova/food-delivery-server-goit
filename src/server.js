@@ -30,7 +30,11 @@ const startServer = port => {
 
   mongoose.connect(
     mongodbUrl,
-    { useNewUrlParser: true, useUnifiedTopology: true },
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false
+    },
     err => {
       if (err) return console.log(err);
       app.listen(port, error => {
