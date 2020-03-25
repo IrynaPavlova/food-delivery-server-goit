@@ -7,7 +7,7 @@ const createOrder = async (request, response) => {
 
     const user = await User.findById(order.creator);
     const userOrders = user.orders;
-    userOrders.push(order._id);
+    userOrders.push(order);
 
     await User.findOneAndUpdate(
       { _id: order.creator },
