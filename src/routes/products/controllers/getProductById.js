@@ -1,40 +1,19 @@
-const fs = require("fs");
-const path = require("path");
+const Product = require("../productSchema");
 
-const getProductById = (request, response) => {
-  const id = request.params.id;
-
-  const filePath = path.join(
-    __dirname,
-    "../../../",
-    "db/products",
-    "all-products.json"
-  );
-
-  const allProducts = JSON.parse(
-    fs.readFileSync(filePath, (err, data) => {
-      if (err) {
-        console.log(err);
-      }
-    })
-  );
-
-  const product = allProducts.filter(elem => {
-    return elem.id == id;
-  });
-
-  if (product.length > 0) {
-    response
-      .set("Content-Type", "aplication/json")
-      .status(200)
-      .json({ status: "success", product });
-    return;
-  } else {
-    response
-      .set("Content-Type", "aplication/json")
-      .status(404)
-      .json({ status: "no products", product });
-    return;
+const getProductById = async (request, response) => {
+  try {
+    const id = request.params.id;
+    const findProduct = await Product.findById(id);
+    response.status(200).json({
+      status: "success",
+      product: findProduct
+    });
+  } catch (error) {
+    response.status(400).json({
+      status: "error",
+      message: error.message,
+      text: "product was not found"
+    });
   }
 };
 
