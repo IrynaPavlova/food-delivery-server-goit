@@ -3,10 +3,13 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const corsMiddleware = require("cors");
+const verifyToken = require("./helpers/verifyToken");
+const authRoute = require("./routes/auth/authRoute");
 const productRoute = require("./routes/products/productRoute");
 const userRoute = require("./routes/users/userRoute");
 const orderRoute = require("./routes/orders/orderRoute");
 const imageRoute = require("./routes/images/imageRoute");
+//const commentsRoute =
 const { mongodbUrl } = require("../config");
 const app = express();
 
@@ -22,10 +25,13 @@ const startServer = port => {
     .use(express.static("static"))
     .use(corsMiddleware())
     .use(morgan("combined"))
+    .use(verifyToken)
+    .use("/auth", authRoute)
     .use("/products", productRoute)
     .use("/users", userRoute)
     .use("/orders", orderRoute)
     .use("/images", imageRoute)
+    //.use("/comments", commentsRoute)
     .use(errorHandler);
 
   mongoose.connect(
