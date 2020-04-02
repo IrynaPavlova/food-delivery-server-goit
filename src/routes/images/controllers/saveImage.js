@@ -2,11 +2,18 @@ const Image = require("../imageSchema");
 const User = require("../../users/userSchema");
 const path = require("path");
 const { port } = require("../../../../config");
+const getToken = require("../../../helpers/getToken");
 
 const saveImage = async (request, response) => {
   try {
+    const token = getToken(request);
+    if (!token) {
+      return response.status(403).send({
+        status: "failed",
+        message: "No token provided"
+      });
+    }
     const body = request.body;
-
     const userId = body.userId;
     const imagePath = body.file.path;
     const imageStats = path.parse(imagePath);

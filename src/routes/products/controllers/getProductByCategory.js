@@ -1,7 +1,15 @@
 const Product = require("../productSchema");
+const getToken = require("../../../helpers/getToken");
 
 const getProductByCategory = async (request, response) => {
   try {
+    const token = getToken(request);
+    if (!token) {
+      return response.status(403).send({
+        status: "failed",
+        message: "No token provided"
+      });
+    }
     const stringCategory = Object.values(request.query)[0];
     const category = stringCategory.slice(1, stringCategory.length - 1);
 

@@ -1,14 +1,16 @@
 const jwt = require("jsonwebtoken");
 const User = require("../../users/userSchema");
-
-const getToken = request =>
-  request.body.token ||
-  request.query.token ||
-  request.headers["x-access-token"];
+const getToken = require("../../../helpers/getToken");
 
 const authCurrent = async (request, response) => {
   try {
     const token = getToken(request);
+    if (!token) {
+      return response.status(403).send({
+        status: "failed",
+        message: "No token provided"
+      });
+    }
     const userData = jwt.decode(token);
     const user = await User.findById(userData.id);
 

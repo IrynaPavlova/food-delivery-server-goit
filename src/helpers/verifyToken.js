@@ -1,10 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { secret } = require("../../config");
-
-const getToken = request =>
-  request.body.token ||
-  request.query.token ||
-  request.headers["x-access-token"];
+const getToken = require("../helpers/getToken");
 
 const verifyToken = (request, response, next) => {
   if (request.url === "/auth/login" || request.url === "/auth/register") {
