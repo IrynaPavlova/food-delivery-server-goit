@@ -9,7 +9,7 @@ const productRoute = require("./routes/products/productRoute");
 const userRoute = require("./routes/users/userRoute");
 const orderRoute = require("./routes/orders/orderRoute");
 const imageRoute = require("./routes/images/imageRoute");
-//const commentsRoute =
+const commentsRoute = require("./routes/comments/commentRoute");
 const { mongodbUrl } = require("../config");
 const app = express();
 
@@ -31,7 +31,7 @@ const startServer = port => {
     .use("/users", userRoute)
     .use("/orders", orderRoute)
     .use("/images", imageRoute)
-    //.use("/comments", commentsRoute)
+    .use("/comments", commentsRoute)
     .use(errorHandler);
 
   mongoose.connect(
@@ -45,7 +45,7 @@ const startServer = port => {
       if (err) return console.log(err);
       app.listen(port, error => {
         if (error) {
-          return console.log("Somthing bad happened", error);
+          return console.log("Something bad happened", error);
         }
         console.log("Server listening on port", port);
       });
