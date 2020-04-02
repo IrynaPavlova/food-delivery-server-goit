@@ -1,13 +1,5 @@
 const User = require("../../users/userSchema");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const { secret } = require("../../../../config");
-
-const generateToken = paramsForToken => {
-  return jwt.sign(paramsForToken, secret, {
-    expiresIn: "30d"
-  });
-};
 
 const authRegister = async (request, response) => {
   try {
@@ -28,16 +20,9 @@ const authRegister = async (request, response) => {
     const newUser = new User(userData);
     const userToSave = await newUser.save();
 
-    const savedUser = await User.findOne({ email: userToSave.email });
-    const password = user.password;
-    const id = savedUser._id;
-    const payload = { password, id };
-    const token = generateToken(payload);
-
     response.status(201).json({
       status: "success",
-      user: savedUser,
-      token: token
+      user: userToSave
     });
   } catch (error) {
     response.status(400).json({

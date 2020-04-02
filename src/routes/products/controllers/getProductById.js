@@ -3,7 +3,7 @@ const Product = require("../productSchema");
 const getProductById = async (request, response) => {
   try {
     const id = request.params.id;
-    const findProduct = await Product.findById(id);
+    const findProduct = await Product.findById(id).populate("ingredients");
     response.status(200).json({
       status: "success",
       product: findProduct

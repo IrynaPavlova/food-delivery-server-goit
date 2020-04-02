@@ -5,7 +5,9 @@ const getProductByIds = async (request, response) => {
     const stringIds = Object.values(request.query)[0];
     const ids = stringIds.slice(1, stringIds.length - 1).split(",");
 
-    const products = await Product.find({ _id: { $in: ids } });
+    const products = await Product.find({ _id: { $in: ids } }).populate(
+      "ingredients"
+    );
     response.status(200).json({
       status: "success",
       products: products
