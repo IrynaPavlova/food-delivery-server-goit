@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const Ingredient = require("../ingredients/ingredientSchema");
 
 const productSchema = new Schema(
   {
@@ -34,7 +35,8 @@ const productSchema = new Schema(
     likes: {
       type: Number,
       required: true
-    }
+    },
+    ingredients: [{ type: mongoose.Types.ObjectId, ref: "Ingredient" }]
   },
   {
     timestamps: true

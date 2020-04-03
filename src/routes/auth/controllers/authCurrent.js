@@ -1,7 +1,8 @@
-const User = require("../userSchema");
+const jwt = require("jsonwebtoken");
+const User = require("../../users/userSchema");
 const getToken = require("../../../helpers/getToken");
 
-const getUserById = async (request, response) => {
+const authCurrent = async (request, response) => {
   try {
     const token = getToken(request);
     if (!token) {
@@ -10,14 +11,12 @@ const getUserById = async (request, response) => {
         message: "No token provided"
       });
     }
-    const id = request.params.id;
-    const findUser = await User.findById(id);
-    response.status(200).json({
-      status: "success",
-      user: findUser
-    });
+    const userData = jwt.decode(token);
+    const user = await User.findById(userData.id);
+
+    response.status(200).json({ status: "success", user: user });
   } catch (error) {
-    response.status(400).json({
+    response.status(404).json({
       status: "error",
       message: error.message,
       text: "user was not found"
@@ -25,4 +24,4 @@ const getUserById = async (request, response) => {
   }
 };
 
-module.exports = getUserById;
+module.exports = authCurrent;
