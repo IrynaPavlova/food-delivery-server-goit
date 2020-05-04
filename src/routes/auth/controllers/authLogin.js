@@ -30,7 +30,7 @@ const authLogin = async (request, response) => {
     const payload = { password, id };
 
     const token = generateToken(payload);
-    response.status(200).json({ status: "success", token: token });
+    response.status(200).json({ status: "success", user: user, token: token });
   } catch (error) {
     response.status(404).json({
       status: "error",

@@ -8,8 +8,7 @@ const userSchema = new Schema(
       required: true
     },
     telephone: {
-      type: String,
-      required: true
+      type: String
     },
     password: {
       type: String,
@@ -20,20 +19,16 @@ const userSchema = new Schema(
       required: true
     },
     images: {
-      type: Array,
-      required: true
+      type: Array
     },
     favoriteProducts: {
-      type: Array,
-      required: true
+      type: Array
     },
     viewedProducts: {
-      type: Array,
-      required: true
+      type: Array
     },
     orders: {
-      type: Array,
-      required: true
+      type: Array
     }
   },
   {

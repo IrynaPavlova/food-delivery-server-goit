@@ -1,15 +1,15 @@
 const User = require("../userSchema");
-const getToken = require("../../../helpers/getToken");
+//const getToken = require("../../../helpers/getToken");
 
 const getAllUsers = async (request, response) => {
   try {
-    const token = getToken(request);
-    if (!token) {
-      return response.status(403).send({
-        status: "failed",
-        message: "No token provided"
-      });
-    }
+    // const token = getToken(request);
+    // if (!token) {
+    //   return response.status(403).send({
+    //     status: "failed",
+    //     message: "No token provided"
+    //   });
+    // }
     const allUsers = await User.find();
     response.status(200).json({
       status: "success",

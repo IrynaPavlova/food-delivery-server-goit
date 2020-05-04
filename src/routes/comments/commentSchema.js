@@ -16,8 +16,7 @@ const commentSchema = new Schema(
       required: true
     },
     mark: {
-      type: Number,
-      required: true
+      type: Number
     }
   },
   {
