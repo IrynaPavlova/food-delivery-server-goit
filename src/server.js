@@ -1,6 +1,5 @@
 const morgan = require("morgan");
 const express = require("express");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const corsMiddleware = require("cors");
 //const verifyToken = require("./helpers/verifyToken");
@@ -18,13 +17,17 @@ const errorHandler = (error, request, response, next) => {
 };
 
 const startServer = port => {
+  if (process.env.NODE_ENV === 'development') {
+    app.use(morgan("combined"))
+  } else {
+    app.use(morgan())
+  }
+
   app
-    .use(bodyParser.urlencoded({ extended: false }))
-    .use(bodyParser.json())
+    .use(express.urlencoded({ extended: false }))
     .use(express.json())
     .use(express.static("static"))
     .use(corsMiddleware())
-    .use(morgan("combined"))
     //.use(verifyToken)
     .use("/auth", authRoute)
     .use("/products", productRoute)
@@ -42,7 +45,10 @@ const startServer = port => {
       useFindAndModify: false
     },
     err => {
-      if (err) return console.log(err);
+      if (err) {
+        console.log(err);
+        process.exit(0);
+      }
       app.listen(port, error => {
         if (error) {
           return console.log("Something bad happened", error);
